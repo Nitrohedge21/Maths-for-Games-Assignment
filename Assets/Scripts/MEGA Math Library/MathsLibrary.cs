@@ -434,6 +434,27 @@ public class Quat
         return RS;
     }
 
+    public Quaternion Convert2UnityQuat()
+    {
+        Quaternion returnValue = new Quaternion();
+
+        returnValue.w = w;
+        returnValue.x = v.x;
+        returnValue.y = v.y;
+        returnValue.z = v.z;
+
+        return returnValue;
+    }
+    //The function below is what I assume it is supposed to be like.
+
+    /*public Quat Convert2UnityQuat(float Angle, MyVector3 Axis)
+    {
+        Quat returnValue = new Quat();
+        returnValue.w = w;
+        returnValue.v = v;
+        return returnValue;
+    }*/
+
     public Matrix4by4 Quat2Rotation()   //Converts a quaternion to rotation
     {
         Matrix4by4 rv = Matrix4by4.Identity;

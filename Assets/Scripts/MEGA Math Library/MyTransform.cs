@@ -80,9 +80,12 @@ public class MyTransform : MonoBehaviour
         {
 
             TransformedVertices[i] = M * new MyVector4(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z, 1);
-            this.GetComponent<CapsuleCollider>().transform.position = M * new MyVector3(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z).Convert2UnityVector3();
-            //this.GetComponent<CapsuleCollider>().transform.rotation = R * new Quat(Rotation.y, new MyVector3(0, 1, 0)).Quat2Rotation();
+
+            //this.GetComponent<CapsuleCollider>().transform.position = M * new MyVector3(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z).Convert2UnityVector3();
+
+            //this.GetComponent<CapsuleCollider>().transform.rotation = new Quat(Rotation.y, new MyVector3(0, 1, 0)).Convert2UnityQuat();
             //No clue on how to fix this, gotta ask Jay
+
             //this.GetComponent<CapsuleCollider>().transform.localScale = scaleMatrix * new MyVector3(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z).Convert2UnityVector3();
             //Scale doesn't work right, it deforms the mesh.
         }
