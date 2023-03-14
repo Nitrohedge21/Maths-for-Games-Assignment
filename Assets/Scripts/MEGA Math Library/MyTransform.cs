@@ -14,6 +14,8 @@ public class MyTransform : MonoBehaviour
     public Matrix4by4 translationMatrix = Matrix4by4.Identity;
     public Matrix4by4 R = Matrix4by4.Identity;
     public Matrix4by4 M = Matrix4by4.Identity;
+    float capsuleRadius = 0.5f;
+    float capsuleHeight = 2f;
     void OnValidate()
     {
         if(!Application.isPlaying)
@@ -81,12 +83,15 @@ public class MyTransform : MonoBehaviour
 
             TransformedVertices[i] = M * new MyVector4(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z, 1);
 
-            //this.GetComponent<CapsuleCollider>().transform.position = M * new MyVector3(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z).Convert2UnityVector3();
+            this.GetComponent<CapsuleCollider>().center = Position;
 
-            //this.GetComponent<CapsuleCollider>().transform.rotation = new Quat(Rotation.y, new MyVector3(0, 1, 0)).Convert2UnityQuat();
+
+            //this.GetComponent<CapsuleCollider>().direction = new Quat(Rotation.y, new MyVector3(0, 1, 0)).Convert2UnityQuat();
             //No clue on how to fix this, gotta ask Jay
 
-            //this.GetComponent<CapsuleCollider>().transform.localScale = scaleMatrix * new MyVector3(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z).Convert2UnityVector3();
+            this.GetComponent<CapsuleCollider>().radius = Mathf.Max(Scale.x, Scale.z) * capsuleRadius;
+            this.GetComponent<CapsuleCollider>().height = Scale.y * capsuleHeight;
+
             //Scale doesn't work right, it deforms the mesh.
         }
         MeshFilter MF = GetComponent<MeshFilter>();
@@ -97,14 +102,3 @@ public class MyTransform : MonoBehaviour
         MF.sharedMesh.RecalculateBounds();
     }
 }
-
-
-//The lines below were tested but weren't succesful
-
-//this.GetComponent<CapsuleCollider>().transform.position = new MyVector3(MF.transform.position).Convert2UnityVector3();
-//this.GetComponent<CapsuleCollider>().transform.position = new MyVector3(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z).Convert2UnityVector3();
-
-//The lines below were tested but they're not working properly(?)
-
-//this.GetComponent<CapsuleCollider>().transform.rotation = new Quat(M * new MyVector3(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z));
-//this.GetComponent<CapsuleCollider>().transform.localScale = M * new MyVector3(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z).Convert2UnityVector3();
