@@ -445,6 +445,18 @@ public class Quat
 
         return returnValue;
     }
+
+    //Probably not how it should be done
+    public Quat Convert2MyQuat()
+    {
+        Quat returnValue = new Quat();
+
+        w = returnValue.w;
+        v = returnValue.v;
+
+        return returnValue;
+    }
+
     //The function below is what I assume it is supposed to be like.
 
     /*public Quat Convert2UnityQuat(float Angle, MyVector3 Axis)

@@ -16,6 +16,8 @@ public class MyTransform : MonoBehaviour
     public Matrix4by4 M = Matrix4by4.Identity;
     float capsuleRadius = 0.5f;
     float capsuleHeight = 2f;
+    float controllerRadius = 8.5f;
+    float controllerHeight = 2f;
     void OnValidate()
     {
         if(!Application.isPlaying)
@@ -84,15 +86,16 @@ public class MyTransform : MonoBehaviour
             TransformedVertices[i] = M * new MyVector4(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z, 1);
 
             this.GetComponent<CapsuleCollider>().center = Position;
-
-
-            //this.GetComponent<CapsuleCollider>().direction = new Quat(Rotation.y, new MyVector3(0, 1, 0)).Convert2UnityQuat();
-            //No clue on how to fix this, gotta ask Jay
-
             this.GetComponent<CapsuleCollider>().radius = Mathf.Max(Scale.x, Scale.z) * capsuleRadius;
             this.GetComponent<CapsuleCollider>().height = Scale.y * capsuleHeight;
 
-            //Scale doesn't work right, it deforms the mesh.
+            //The lines below were added specifically for this project.
+            this.GetComponent<CharacterController>().center = Position;
+            this.GetComponent<CharacterController>().radius = Mathf.Max(Scale.x, Scale.z) * controllerRadius;
+            this.GetComponent<CharacterController>().height = Scale.y * controllerHeight;
+            this.GetComponent<CharacterController>().skinWidth = 0.0001f;   //This one and minMoveDistance doesn't work for some fucking reason.
+            this.GetComponent<CharacterController>().minMoveDistance = 0f;
+
         }
         MeshFilter MF = GetComponent<MeshFilter>();
         MF.sharedMesh.vertices = MyVector3.Convert2UnityArray(TransformedVertices);
