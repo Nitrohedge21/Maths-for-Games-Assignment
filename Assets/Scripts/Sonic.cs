@@ -9,8 +9,5 @@ public class Sonic : Movement
         Speed = 6.0f;
     }
 
-    void Update()
-    {
-
-    }
+    
 }

@@ -59,10 +59,10 @@ public class MyVector3
 
         return returnValue;
     } 
-    public MyVector3 Convert2MyVector3(Vector3 v)
+    public static MyVector3 Convert2MyVector3(Vector3 v)
     {
         MyVector3 returnValue = new MyVector3(0,0,0);
-        //Not entirely sure if this does what I intended
+
         returnValue.x = v.x;
         returnValue.y = v.y;
         returnValue.z = v.z;
