@@ -23,10 +23,10 @@ public class CharacterSwitch : MonoBehaviour
         {
             Switch();
             Camera.transform.position = new MyVector3(CurrentCharacter.GetComponent<MyTransform>().Position).Convert2UnityVector3();
+            //Debug.Log("Current Target is " + CurrentCharacter);
         }
             
     }
-    //This script isn't done yet so it's not gonna work yet.
     void Switch()
     {
 

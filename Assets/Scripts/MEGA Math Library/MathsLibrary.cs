@@ -246,7 +246,7 @@ public class AABB
     }
     public float Bottom
     {
-        get { return MinExtent.x; }
+        get { return MinExtent.y; }
 
     }
     public float Left

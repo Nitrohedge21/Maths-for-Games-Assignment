@@ -14,6 +14,9 @@ public class MyTransform : MonoBehaviour
     public Matrix4by4 translationMatrix = Matrix4by4.Identity;
     public Matrix4by4 R = Matrix4by4.Identity;
     public Matrix4by4 M = Matrix4by4.Identity;
+
+    float capsuleRadius = 0.5f;
+    float capsuleHeight = 2f;
     void OnValidate()
     {
         if(!Application.isPlaying)
@@ -75,13 +78,9 @@ public class MyTransform : MonoBehaviour
         //R = q.Quat2Rotation(); //This one rotates the object using the quaternions
         R = yawMatrix * (pitchMatrix * rollMatrix);  //Rotation Matrix
         M = translationMatrix * (R * scaleMatrix);    //This is the combination of all the matrices, check old version for seperate editing of verts.
+        
         //Transform each individual vertex, the part that effects the mesh
-        for (int i = 0; i < TransformedVertices.Length; i++)
-        {
-
-            TransformedVertices[i] = M * new MyVector4(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z, 1);
-
-        }
+        for (int i = 0; i < TransformedVertices.Length; i++) {TransformedVertices[i] = M * new MyVector4(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z, 1);}
         MeshFilter MF = GetComponent<MeshFilter>();
         MF.sharedMesh.vertices = MyVector3.Convert2UnityArray(TransformedVertices);
 
