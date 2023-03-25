@@ -4,7 +4,6 @@ using UnityEngine;
 public class MyVector3
 {
     public float x, y, z;
-    
     public MyVector3(float x, float y, float z)
     {
         this.x = x;

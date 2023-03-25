@@ -1,5 +1,3 @@
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -14,9 +12,6 @@ public class MyTransform : MonoBehaviour
     public Matrix4by4 translationMatrix = Matrix4by4.Identity;
     public Matrix4by4 R = Matrix4by4.Identity;
     public Matrix4by4 M = Matrix4by4.Identity;
-
-    float capsuleRadius = 0.5f;
-    float capsuleHeight = 2f;
     void OnValidate()
     {
         if(!Application.isPlaying)
@@ -83,7 +78,6 @@ public class MyTransform : MonoBehaviour
         for (int i = 0; i < TransformedVertices.Length; i++) {TransformedVertices[i] = M * new MyVector4(ModelSpaceVertices[i].x, ModelSpaceVertices[i].y, ModelSpaceVertices[i].z, 1);}
         MeshFilter MF = GetComponent<MeshFilter>();
         MF.sharedMesh.vertices = MyVector3.Convert2UnityArray(TransformedVertices);
-
         //These might be necessary depending on what's being done.
         MF.sharedMesh.RecalculateNormals();
         MF.sharedMesh.RecalculateBounds();
