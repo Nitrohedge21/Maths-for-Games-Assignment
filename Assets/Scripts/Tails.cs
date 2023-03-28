@@ -6,7 +6,7 @@ public class Tails : Movement
 {
     protected override void Start()
     {
-        Speed = 4.0f;
+        Speed = 18.0f;
         base.Start();
     }
     protected virtual void Update()

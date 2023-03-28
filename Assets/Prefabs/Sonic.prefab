@@ -129,3 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 6
+  jumpForce: 10
+  isJumping: 0
+  isControllable: 0
+  isGrounded: 1

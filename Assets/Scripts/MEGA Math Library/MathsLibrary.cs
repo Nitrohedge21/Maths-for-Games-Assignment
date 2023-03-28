@@ -193,7 +193,8 @@ public class Matrix4by4
 
     public MyVector4 GetRow(int row)
     {
-        return new MyVector4(values[0, row],
+        return new MyVector4(
+            values[0, row],
             values[1, row],
             values[2, row],
             values[3, row]);
@@ -201,6 +202,38 @@ public class Matrix4by4
     //Literally found something about this in stackoverflow
     // https://stackoverflow.com/questions/55640065/c-sharp-getting-the-rows-of-matrices
 
+    public MyVector4 GetColumn(int column)
+    {
+        return new MyVector4(
+            values[column, 0],
+            values[column, 1],
+            values[column, 2],
+            values[column, 3]);
+    }
+
+    public void SetColumn(int columnIndex, MyVector4 rv)
+    {
+        values[columnIndex, 0] = rv.x;
+        values[columnIndex, 1] = rv.y;
+        values[columnIndex, 2] = rv.z;
+        values[columnIndex, 3] = rv.w;
+    }
+
+    public Matrix4by4 InvertTR()
+    {
+        Matrix4by4 rv = Identity;
+
+        //Transpose the 3x3 part
+        //transpose(r3)
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                rv.values[i, j] = values[j, i];
+
+        //Sets the last column to -transpose(r3)*t
+        rv.SetColumn(3, (rv * GetColumn(3)) * -1);
+        return rv;
+
+    }
     public Matrix4by4 TranslationInverse()
     {
         Matrix4by4 rv = Identity;
@@ -446,7 +479,6 @@ public class Quat
         return returnValue;
     }
 
-    //Probably not how it should be done
     public Quat Convert2MyQuat()
     {
         Quat returnValue = new Quat();
@@ -456,16 +488,6 @@ public class Quat
 
         return returnValue;
     }
-
-    //The function below is what I assume it is supposed to be like.
-
-    /*public Quat Convert2UnityQuat(float Angle, MyVector3 Axis)
-    {
-        Quat returnValue = new Quat();
-        returnValue.w = w;
-        returnValue.v = v;
-        return returnValue;
-    }*/
 
     public Matrix4by4 Quat2Rotation()   //Converts a quaternion to rotation
     {

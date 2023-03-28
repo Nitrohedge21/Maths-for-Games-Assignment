@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GroundCollision : MonoBehaviour
@@ -11,11 +9,5 @@ public class GroundCollision : MonoBehaviour
     {
         Offset = MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Scale) / 2;
         collision = new AABB(MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) - Offset, MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) + Offset);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
