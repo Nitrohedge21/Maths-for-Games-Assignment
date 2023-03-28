@@ -181,7 +181,7 @@ public class MyVector3
     {
         return Subtract(lhs, rhs);
     }
-    //[IMPORTANT] This might not be right!! //
+     //[IMPORTANT] This might not be right!! //
     public static MyVector3 operator -(MyVector3 a)
     {
         MyVector3 rv = new MyVector3(0, 0, 0);

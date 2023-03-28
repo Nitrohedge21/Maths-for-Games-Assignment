@@ -2,53 +2,47 @@ using UnityEngine;
 using Cinemachine;
 public class Movement : MonoBehaviour
 {
-    //protected CharacterController CharacterController;
     protected Transform Camera;
     protected CapsuleCollider Collider;
     [SerializeField] protected float Speed = 6f;
     protected float RotationRate = 10f;
     protected float JumpForce;
-    protected MyVector3 Velocity = new MyVector3(0f,0f,0f);
     protected bool GroundedPlayer;
     protected float JumpHeight = 1.0f;
     protected float GravityValue = -9.81f;
     protected AABB objectCollisionBox;
     protected MyVector3 Offset = new MyVector3(1f, 1f, 1f);
     protected MyVector3 gravityForce = new MyVector3(0f,-9.8f,0f);
-    protected CinemachineFreeLook cam;
+    protected MyVector3 playerPosition;
     float capsuleRadius = 0.5f;
     float capsuleHeight = 2f;
-    //float controllerRadius = 8.5f;
-    //float controllerHeight = 2f;
+    float capsuleHalfHeight;
 
     protected virtual void Start()
     {
-        //CharacterController = GetComponent<CharacterController>();
         Collider = GetComponent<CapsuleCollider>();
-        objectCollisionBox = new AABB(MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) - Offset, MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) + Offset);
+        playerPosition = MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position);
+        objectCollisionBox = new AABB(playerPosition - Offset, playerPosition + Offset);
+        capsuleHalfHeight = capsuleHeight / 2;
+        Camera.transform.position = playerPosition.Convert2UnityVector3();
     }
-
+    
     protected virtual void FixedUpdate()
     {
         CharacterStuff();
-
-        //Debug.Log("Movement is updating");
-
         
-        objectCollisionBox = new AABB(MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) - Offset, MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) + Offset);
+        objectCollisionBox = new AABB(playerPosition - Offset, playerPosition + Offset);
         CollisionCheck();
-        //You can also use the min and max extents
-
-
+    }
+    protected virtual void Update()
+    {
+        Move();
     }
     void CharacterStuff()
     {
-        this.GetComponent<CapsuleCollider>().center = GetComponent<MyTransform>().Position;
-        this.GetComponent<CapsuleCollider>().radius = Mathf.Max(GetComponent<MyTransform>().Scale.x, GetComponent<MyTransform>().Scale.z) * capsuleRadius;
-        this.GetComponent<CapsuleCollider>().height = GetComponent<MyTransform>().Scale.y * capsuleHeight;
-        //this is NOT working as expected, gotta ask jay how I could possibly fix it
-        //cam.Follow = this.GetComponent<MyTransform>().transform;  
-        //cam.LookAt = this.GetComponent<MyTransform>().transform;
+        this.GetComponent<CapsuleCollider>().center = playerPosition.Convert2UnityVector3();
+        this.GetComponent<CapsuleCollider>().radius = Mathf.Max(this.GetComponent<MyTransform>().Scale.x, this.GetComponent<MyTransform>().Scale.z) * capsuleRadius;
+        this.GetComponent<CapsuleCollider>().height = this.GetComponent<MyTransform>().Scale.y * capsuleHeight;
     }
 
     void CollisionCheck()
@@ -60,11 +54,32 @@ public class Movement : MonoBehaviour
             if (AABB.Intersects(objectCollisionBox, floor.GetComponent<GroundCollision>().collision))
             {
                 AABB floorCollisionBox = floor.GetComponent<GroundCollision>().collision;
-                this.gameObject.GetComponent<MyTransform>().Position = new MyVector3(this.gameObject.GetComponent<MyTransform>().Position.x, floorCollisionBox.Top + 1f, this.gameObject.GetComponent<MyTransform>().Position.z).Convert2UnityVector3();
-            }//Get the height's half value and then add it on to the top
+                playerPosition = new MyVector3(playerPosition.x, floorCollisionBox.Top + capsuleHalfHeight, playerPosition.z);
+            }
         }
 
     }
+
+     void Move()
+    {
+        //Figure out how to implement basic gravity without a rigidbody.
+
+        if(Input.GetKey(KeyCode.W))
+        {
+            playerPosition.x += 1f * Speed * Time.deltaTime;
+            Debug.Log("W is being called");
+        }
+        else if(Input.GetKey(KeyCode.S))
+        {
+            playerPosition.x += -1f * Speed * Time.deltaTime;
+            Debug.Log("S is being called");
+        }
+        else
+        {
+            Debug.LogError("None of the inputs are being called");
+        }
+    }
+
 }
 
 //test
