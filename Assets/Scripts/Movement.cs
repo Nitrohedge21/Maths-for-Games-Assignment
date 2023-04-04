@@ -10,9 +10,9 @@ public class Movement : MonoBehaviour
     float capsuleRadius = 0.5f;
     float capsuleHeight = 2f;
     float capsuleHalfHeight;
-
+    float rotationRate = 2.0f;
     //Editable Stuff
-    [SerializeField] protected float Speed = 6f;
+    [SerializeField] protected  internal float Speed = 6f;
     [SerializeField] protected float jumpForce = 10.0f;
     public bool isJumping = false;
     public bool isControllable = false;
@@ -76,21 +76,26 @@ public class Movement : MonoBehaviour
         if(Input.GetKey(KeyCode.W))
         {
             this.GetComponent<MyTransform>().Position.x += 1f * Speed * Time.deltaTime;
+            this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, 180f) / rotationRate).Convert2UnityVector3();
             Debug.Log("Moving Forward");
         }
         else if(Input.GetKey(KeyCode.S))
         {
             this.GetComponent<MyTransform>().Position.x += -1f * Speed * Time.deltaTime;
+            this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, -180f) / rotationRate).Convert2UnityVector3();
             Debug.Log("Moving Backward");
         }
         else if (Input.GetKey(KeyCode.A))
         {
             this.GetComponent<MyTransform>().Position.z += 1f * Speed * Time.deltaTime;
+            this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, 90f) / rotationRate).Convert2UnityVector3();
             Debug.Log("Moving Left");
         }
         else if (Input.GetKey(KeyCode.D))
         {
             this.GetComponent<MyTransform>().Position.z += -1f * Speed * Time.deltaTime;
+            this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, -90f) / rotationRate).Convert2UnityVector3();
+            //This doesn't work properly yet but it's gonna be something along these lines.
             Debug.Log("Moving Right");
         }
         else if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
