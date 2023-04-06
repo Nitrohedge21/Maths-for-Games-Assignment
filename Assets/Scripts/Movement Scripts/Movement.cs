@@ -4,7 +4,7 @@ public class Movement : MonoBehaviour
     //Required Stuff
     protected Transform Camera;
     protected CapsuleCollider Collider;
-    protected AABB objectCollisionBox;
+    [HideInInspector] public AABB playerCollision;
     protected MyVector3 Offset = new MyVector3(1f, 1f, 1f);
     protected float gravityForce = -9.81f;
     float capsuleRadius = 0.5f;
@@ -20,8 +20,9 @@ public class Movement : MonoBehaviour
 
     protected virtual void Start()
     {
+        Camera = GameObject.Find("Main Camera").transform;
         Collider = GetComponent<CapsuleCollider>();
-        objectCollisionBox = new AABB(MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) - Offset, MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) + Offset);
+        playerCollision = new AABB(MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) - Offset, MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) + Offset);
         capsuleHalfHeight = capsuleHeight / 2;
         Camera.transform.position = this.GetComponent<MyTransform>().Position;
     }
@@ -30,8 +31,9 @@ public class Movement : MonoBehaviour
     {
         CharacterStuff();
         
-        objectCollisionBox = new AABB(MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) - Offset, MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) + Offset);
-        CollisionCheck();
+        playerCollision = new AABB(MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) - Offset, MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) + Offset);
+        GroundCollisionCheck();
+       // ObjectCollisionCheck(); //This function is gonna be kept for a while as I can't figure out how to fix the other script.
     }
     protected virtual void Update()
     {
@@ -47,27 +49,37 @@ public class Movement : MonoBehaviour
         this.GetComponent<CapsuleCollider>().height = this.GetComponent<MyTransform>().Scale.y * capsuleHeight;
     }
 
-    void CollisionCheck()
+    void GroundCollisionCheck()
     {
-        
         GameObject[] floors = GameObject.FindGameObjectsWithTag("Floor");
         foreach (GameObject floor in floors)
         {
-            if (AABB.Intersects(objectCollisionBox, floor.GetComponent<GroundCollision>().collision))
+            AABB floorCollisionBox = floor.GetComponent<GroundCollision>().collision;
+            if (AABB.Intersects(playerCollision, floorCollisionBox))
             {
-                AABB floorCollisionBox = floor.GetComponent<GroundCollision>().collision;
                 this.GetComponent<MyTransform>().Position = new MyVector3(this.GetComponent<MyTransform>().Position.x, floorCollisionBox.Top + capsuleHalfHeight, this.GetComponent<MyTransform>().Position.z).Convert2UnityVector3();
                 //This line only makes the colliding object go on top of the other one.
                 isGrounded = true;
             }
             else { isGrounded = false; };
         }
-
     }
 
-     void Move()
+    /*void ObjectCollisionCheck()
     {
-        //Figure out how to use multiple input commands at once.
+        //If the collided object is a collectable, destroy the collectable object.
+        GameObject orb = GameObject.FindGameObjectWithTag("Collectables");
+        AABB orbCollision = orb.GetComponent<ObjectCollision>().collision;
+        if (AABB.Intersects(playerCollision, orbCollision))
+        {
+            Destroy(orb);
+            Debug.Log("Collected an orb");
+        }
+    }*/
+
+     void Move()
+     {
+        //Figure out how to handle multiple input commands at once.
         if(isJumping == false && isGrounded == false)   //This if statement has to be changed as well
         {
             this.GetComponent<MyTransform>().Position.y += gravityForce * Time.deltaTime;
@@ -76,44 +88,44 @@ public class Movement : MonoBehaviour
         if(Input.GetKey(KeyCode.W))
         {
             this.GetComponent<MyTransform>().Position.x += 1f * Speed * Time.deltaTime;
-            this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, 180f) / rotationRate).Convert2UnityVector3();
-            Debug.Log("Moving Forward");
+            //this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, 180f) / rotationRate).Convert2UnityVector3();
+            //Debug.Log("Moving Forward");
         }
         else if(Input.GetKey(KeyCode.S))
         {
             this.GetComponent<MyTransform>().Position.x += -1f * Speed * Time.deltaTime;
-            this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, -180f) / rotationRate).Convert2UnityVector3();
-            Debug.Log("Moving Backward");
+            //this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, -180f) / rotationRate).Convert2UnityVector3();
+            //Debug.Log("Moving Backward");
         }
         else if (Input.GetKey(KeyCode.A))
         {
             this.GetComponent<MyTransform>().Position.z += 1f * Speed * Time.deltaTime;
-            this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, 90f) / rotationRate).Convert2UnityVector3();
-            Debug.Log("Moving Left");
+            //this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, 90f) / rotationRate).Convert2UnityVector3();
+            //Debug.Log("Moving Left");
         }
         else if (Input.GetKey(KeyCode.D))
         {
             this.GetComponent<MyTransform>().Position.z += -1f * Speed * Time.deltaTime;
-            this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, -90f) / rotationRate).Convert2UnityVector3();
+            //this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, -90f) / rotationRate).Convert2UnityVector3();
             //This doesn't work properly yet but it's gonna be something along these lines.
-            Debug.Log("Moving Right");
+            //Debug.Log("Moving Right");
         }
         else if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
         {
             this.GetComponent<MyTransform>().Position.y += jumpForce * Time.deltaTime;
             isJumping = true;
-            Debug.Log("Jump input pressed");
+            //Debug.Log("Jump input pressed");
         }
         else if (Input.GetKeyUp(KeyCode.Space) && isGrounded == false)
         {
             this.GetComponent<MyTransform>().Position.y += -jumpForce * Time.deltaTime;
             isJumping = false;
-            Debug.Log("Jump input released");
+            //Debug.Log("Jump input released");
         }
         else
         {
-            Debug.Log("None of the inputs are being called");
+            //Debug.Log("None of the inputs are being called");
         }
-    }
+     }
 
 }

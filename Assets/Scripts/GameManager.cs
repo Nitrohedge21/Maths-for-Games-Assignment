@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
-    GameObject player;
     void Start()
     {
         
@@ -15,9 +14,9 @@ public class GameManager : MonoBehaviour
 
     void RestartGame()
     {
-        if(Input.GetKey(KeyCode.R) && this == player)
+        if(Input.GetKey(KeyCode.R))
         {
-            SceneManager.LoadScene("SampleScene");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }
