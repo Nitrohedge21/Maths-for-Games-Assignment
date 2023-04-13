@@ -3,7 +3,6 @@ using UnityEngine.UI;
 public class ItemCollector : MonoBehaviour
 {
     public Text scoreText;
-
     void Start() 
     {
         IncreaseValue.orbAmount = 0;
@@ -12,18 +11,28 @@ public class ItemCollector : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //If the collided object is a collectable, destroy the collectable object.
-        GameObject orb = GameObject.FindGameObjectWithTag("Collectables");
-        GameObject player = GameObject.FindGameObjectWithTag("Player"); //This line is not working right because it's only able to target one character at a time. And the orb gets collected twice for some fucking reason IDK why.
-        AABB orbCollision = orb.GetComponent<ObjectCollision>().collision;  //This line causes error spam after there are no orbs left in the scene. Might need to change it up a bit.
-        AABB playerCollision = player.GetComponent<Movement>().playerCollision;
-        if (AABB.Intersects(playerCollision, orbCollision))
+        // The original 2D project has this script attached to both of the characters.
+        // However, that one uses Unity's own functions and such.
+        //This one only requires one of them to work properly, the count doubles the amount when the script is on both of them.
+        GameObject[] orbs = GameObject.FindGameObjectsWithTag("Collectables");
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players) 
         {
-            IncreaseValue.orbAmount++;
-            Destroy(orb);
-            scoreText.text = "Orb Count : " + IncreaseValue.orbAmount;
-            Debug.Log("Current orb amount: " + IncreaseValue.orbAmount);
+            AABB playerCollision = player.GetComponent<Movement>().playerCollision;
+            foreach (GameObject orb in orbs)
+            {
+                AABB orbCollision = orb.GetComponent<ObjectCollision>().collision;
+                if (AABB.Intersects(playerCollision, orbCollision))
+                {
+                    IncreaseValue.orbAmount++;
+                    Destroy(orb);
+                    scoreText.text = "Orb Count : " + IncreaseValue.orbAmount;
+                    //Debug.Log("Current orb amount: " + IncreaseValue.orbAmount);
+                }
+            }
         }
+        
+
     }
 }
 
