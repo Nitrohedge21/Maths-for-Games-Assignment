@@ -68,50 +68,20 @@ public class Movement : MonoBehaviour
 
      void Move()
      {
-        //Figure out how to handle multiple input commands at once.
-        //Fix the move if statement
-        if (isJumping == false && isGrounded == false)   //This if statement might need to be changed as well
-        {
-            this.GetComponent<MyTransform>().Position.y += gravityForce * Time.deltaTime;
-        }
-
+        if (isJumping == false && isGrounded == false) { this.GetComponent<MyTransform>().Position.y += gravityForce * Time.deltaTime; }    //Applies gravity while it's not jumping and it's not grounded
         MyVector3 move = new MyVector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         this.GetComponent<MyTransform>().Position += move.Convert2UnityVector3() * Speed * Time.deltaTime;
-        if (move != new MyVector3(0, 0, 0))
-        {
-            this.GetComponent<MyTransform>().Position = move.Convert2UnityVector3();
-            //Tried to set the mytransform.transform.position to move but it didn't work as intended
-        }
+        //if (move != new MyVector3(0, 0, 0)){  }  //Either make an implicit operator or comment this line out
 
-        //if (Input.GetKey(KeyCode.W))
-        //{
-        //    this.GetComponent<MyTransform>().Position.x += 1f * Speed * Time.deltaTime;
-        //    //this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, 180f) / rotationRate).Convert2UnityVector3();
-        //}
-        //else if(Input.GetKey(KeyCode.S))
-        //{
-        //    this.GetComponent<MyTransform>().Position.x += -1f * Speed * Time.deltaTime;
-        //    //this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, -180f) / rotationRate).Convert2UnityVector3();
-        //}
-        //else if (Input.GetKey(KeyCode.A))
-        //{
-        //    this.GetComponent<MyTransform>().Position.z += 1f * Speed * Time.deltaTime;
-        //    //this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, 90f) / rotationRate).Convert2UnityVector3();
-        //}
-        //else if (Input.GetKey(KeyCode.D))
-        //{
-        //    this.GetComponent<MyTransform>().Position.z += -1f * Speed * Time.deltaTime;
-        //    //this.GetComponent<MyTransform>().Rotation = (new MyVector3(0f, 0f, -90f) / rotationRate).Convert2UnityVector3();
-        //    //This doesn't work properly yet but it's gonna be something along these lines.
-        //}
-        else if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
+
+        if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
             this.GetComponent<MyTransform>().Position.y += Mathf.Sqrt(jumpForce * -3.0f * gravityForce);
             isJumping = true;
         }
-        else if (Input.GetKeyUp(KeyCode.Space) && isGrounded == false) {isJumping = false;}
         else
         {
+            isJumping = false;
             //Debug.Log("None of the inputs are being called");
         }
      }

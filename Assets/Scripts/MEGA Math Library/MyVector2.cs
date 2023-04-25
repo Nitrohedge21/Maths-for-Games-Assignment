@@ -33,6 +33,12 @@ public class MyVector2
 
         return returnValue;
     }
+    public static float Distance(MyVector2 a, MyVector2 b)  //Most likely not how it's supposed to be done
+    {
+        float returnValue;
+        returnValue = Mathf.Sqrt(DotProduct(Subtract(a, b), Subtract(a, b), false));
+        return returnValue;
+    }
 
     public float Length()
     {
