@@ -71,12 +71,14 @@ public class Movement : MonoBehaviour
         if (isJumping == false && isGrounded == false) { this.GetComponent<MyTransform>().Position.y += gravityForce * Time.deltaTime; }    //Applies gravity while it's not jumping and it's not grounded
         MyVector3 move = new MyVector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         this.GetComponent<MyTransform>().Position += move.Convert2UnityVector3() * Speed * Time.deltaTime;
-        //if (move != new MyVector3(0, 0, 0)){  }  //Either make an implicit operator or comment this line out
+        
+        //gameObject.transform.forward = move.Convert2UnityVector3();
+        //this.GetComponent<MyTransform>().Position = gameObject.transform.forward;
 
 
         if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
-            this.GetComponent<MyTransform>().Position.y += Mathf.Sqrt(jumpForce * -3.0f * gravityForce);
+            this.GetComponent<MyTransform>().Position.y += Mathf.Sqrt(jumpForce * -1.5f * gravityForce);
             isJumping = true;
         }
         else
@@ -84,6 +86,29 @@ public class Movement : MonoBehaviour
             isJumping = false;
             //Debug.Log("None of the inputs are being called");
         }
-     }
 
+        RotateWhileMoving();
+    }
+
+
+    void RotateWhileMoving()
+    {
+        //This isn't the best way to go but I might as well keep it as it is.
+        var inputValue = Input.inputString; //This switch case was taken from here: https://stackoverflow.com/a/57125512
+        switch (inputValue)
+        {
+            case ("w"):
+                this.GetComponent<MyTransform>().Rotation = new MyVector3(0.0f, 0.0f, 00.0f).Convert2UnityVector3();
+                break;
+            case ("a"):
+                this.GetComponent<MyTransform>().Rotation = new MyVector3(0.0f, 0.0f, -90.0f).Convert2UnityVector3();
+                break;
+            case ("s"):
+                this.GetComponent<MyTransform>().Rotation = new MyVector3(0.0f, 0.0f, 180.0f).Convert2UnityVector3();
+                break;
+            case ("d"):
+                this.GetComponent<MyTransform>().Rotation = new MyVector3(0.0f, 0.0f, 90.0f).Convert2UnityVector3();
+                break;
+        }
+    }
 }
