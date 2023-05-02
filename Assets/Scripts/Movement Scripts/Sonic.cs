@@ -7,6 +7,7 @@ public class Sonic : Movement
     protected override void Start()
     {
         Speed = 20.0f;
+        jumpForce = 1.0f;
         base.Start();
     }
     protected virtual void Update()

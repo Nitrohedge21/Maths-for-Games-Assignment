@@ -12,8 +12,8 @@ public class Movement : MonoBehaviour
     float capsuleHalfHeight;
     //float rotationRate = 2.0f;
     //Editable Stuff
-    [SerializeField] protected  internal float Speed = 6f;
-    [SerializeField] protected float jumpForce = 1.0f;
+    [SerializeField] protected internal float Speed = 6f;
+    [SerializeField] protected internal float jumpForce = 1.0f;
     public bool isJumping = false;
     public bool isControllable = false;
     public bool isGrounded;
@@ -33,7 +33,6 @@ public class Movement : MonoBehaviour
         
         playerCollision = new AABB(MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) - Offset, MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Position) + Offset);
         GroundCollisionCheck();
-       // ObjectCollisionCheck(); //This function is gonna be kept for a while as I can't figure out how to fix the other script.
     }
     protected virtual void Update()
     {

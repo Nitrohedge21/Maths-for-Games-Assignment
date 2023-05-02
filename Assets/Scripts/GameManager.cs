@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     GameObject canvas;
-    private 
+    private int totalOrbs = 5;
     void Start()
     {
         canvas = GameObject.Find("Canvas (UI)");
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     bool isGameOver()
     {
         //If the goldAmount reaches 68, activates the victory screen image and ends the game.
-        if (IncreaseValue.orbAmount == 2)
+        if (IncreaseValue.orbAmount == totalOrbs)
         {
             canvas.transform.GetChild(1).gameObject.SetActive(true);
 
