@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     GameObject canvas;
-    private int totalOrbs = 5;
+    private int totalOrbs = 50;
     void Start()
     {
         canvas = GameObject.Find("Canvas (UI)");

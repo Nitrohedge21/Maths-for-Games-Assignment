@@ -6,7 +6,7 @@ public class ItemCollector : MonoBehaviour
     void Start() 
     {
         IncreaseValue.orbAmount = 0;
-        scoreText.text = "Orb Count : " + IncreaseValue.orbAmount;
+        scoreText.text = "Orbs : " + IncreaseValue.orbAmount;
     }
 
     private void FixedUpdate()
@@ -26,7 +26,7 @@ public class ItemCollector : MonoBehaviour
                 {
                     IncreaseValue.orbAmount++;
                     Destroy(orb);
-                    scoreText.text = "Orb Count : " + IncreaseValue.orbAmount;
+                    scoreText.text = "Orbs : " + IncreaseValue.orbAmount;
                     //Debug.Log("Current orb amount: " + IncreaseValue.orbAmount);
                 }
             }

@@ -59,6 +59,8 @@ public class Movement : MonoBehaviour
                 this.GetComponent<MyTransform>().Position = new MyVector3(this.GetComponent<MyTransform>().Position.x, floorCollisionBox.Top + capsuleHalfHeight, this.GetComponent<MyTransform>().Position.z).Convert2UnityVector3();
                 //This line only makes the colliding object go on top of the other one.
                 isGrounded = true;
+                break;
+                //To fix the weird collision issue I just had to break out of the if statement apparently. Fixed this thanks to Jay.
             }
             else { isGrounded = false; };
         }
@@ -93,7 +95,7 @@ public class Movement : MonoBehaviour
     void RotateWhileMoving()
     {
         //This isn't the best way to go but I might as well keep it as it is.
-        var inputValue = Input.inputString; //This switch case was taken from here: https://stackoverflow.com/a/57125512
+        var inputValue = Input.inputString; //This switch case idea was taken from here: https://stackoverflow.com/a/57125512
         switch (inputValue)
         {
             case ("w"):
@@ -101,12 +103,14 @@ public class Movement : MonoBehaviour
                 break;
             case ("a"):
                 this.GetComponent<MyTransform>().Rotation = new MyVector3(0.0f, 0.0f, -90.0f).Convert2UnityVector3();
+                //this.GetComponent<MyTransform>().Rotation = MyVector3.Vect3Lerp(MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Rotation), new MyVector3(0.0f, 0.0f, -90.0f), 0.5f).Convert2UnityVector3();
                 break;
             case ("s"):
                 this.GetComponent<MyTransform>().Rotation = new MyVector3(0.0f, 0.0f, 180.0f).Convert2UnityVector3();
                 break;
             case ("d"):
                 this.GetComponent<MyTransform>().Rotation = new MyVector3(0.0f, 0.0f, 90.0f).Convert2UnityVector3();
+                //this.GetComponent<MyTransform>().Rotation = MyVector3.Vect3Lerp(MyVector3.Convert2MyVector3(this.GetComponent<MyTransform>().Rotation), new MyVector3(0.0f, 0.0f, 90.0f), 0.5f).Convert2UnityVector3();
                 break;
         }
     }
